@@ -46,7 +46,7 @@ public class GiveGift implements Task {
                 long expireAt = Long.parseLong(json.get("expire_at").getAsString());
                 /* 礼物还剩 1 天送出 */
                 /* 永久礼物到期时间为 0 */
-                if ((expireAt - nowTime) < 60 * 60 * 25 * 1 && expireAt != 0) {
+                if ((expireAt - nowTime) < 60 * 60 * 25 && expireAt != 0) {
                     /* 如果有未送出的礼物，则获取一个直播间 */
                     if ("".equals(roomId)) {
                         JsonObject uidAndRid = getuidAndRid();
@@ -138,9 +138,9 @@ public class GiveGift implements Task {
      * @Time 2020-10-13
      */
     public JsonArray xliveGiftBagList() {
-        return HttpUtil.doGet("https://api.live.bilibili.com/xlive/web-room/v1/gift/bag_list")
-                .get("data").getAsJsonObject()
-                .get("list").getAsJsonArray();
+        JsonObject doGet = HttpUtil.doGet("https://api.live.bilibili.com/xlive/web-room/v1/gift/bag_list");
+        log.info(">>>请求B站直播获取背包礼物,返回结果:{}",doGet);
+        return doGet.get("data").getAsJsonObject().get("list").getAsJsonArray();
     }
 
     /**
